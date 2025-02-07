@@ -71,12 +71,13 @@ my_sorted_list_by_date = sort_by_date([
 print(my_sorted_list_by_date)
 
 my_filter_by_currency = filter_by_currency(transactions, "USD")
-for _ in range(3):
-    try:
-        print(next(my_filter_by_currency))
-    except StopIteration:
-        print("Список окончен")
-        break
+for _ in range(1):
+    print(next(my_filter_by_currency, 'Список окончен'))
+    # try:
+    #     print(next(my_filter_by_currency))
+    # except StopIteration:
+    #     print("Список окончен")
+    #     break
 
 
 

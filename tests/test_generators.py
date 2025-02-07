@@ -1,28 +1,9 @@
 import pytest
 
+from src.generators import filter_by_currency
 
-@pytest.fixture
-def all_operations():
-    return [
-        {'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364'},
-        {'id': 939719570, 'state': 'EXECUTED', 'date': '2018-06-30T02:08:58.425572'},
-        {'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'},
-        {'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'},
-        ]
-
-
-@pytest.fixture
-def same_date_operations():
-    return [
-        {'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364'},
-        {'id': 99928829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364'},
-        {'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'},
-        ]
-
-
-@pytest.fixture
-def transactions():
-    return [
+@pytest.mark.parametrize("user_currency, expected", [
+    ("USD", [
     {
         "id": 939719570,
         "state": "EXECUTED",
@@ -40,7 +21,8 @@ def transactions():
         "description": "Перевод со счета на счет",
         "from": "Счет 19708645243227258542",
         "to": "Счет 75651667383060284188"
-    },
+    }]),
+    ("RUB", [
     {
         "id": 140011234,
         "state": "EXECUTED",
@@ -49,5 +31,9 @@ def transactions():
         "description": "Перевод с карты на карту",
         "from": "Счет 11108645243227258000",
         "to": "Счет 22251667383060284222"
-    },
-]
+    }]),
+])
+def test_filter_by_currency_1(transactions, user_currency, expected: list[dict]):
+    result = list((transaction for transaction in transactions
+                   if transaction["operationAmount"]["currency"]["name"] == user_currency))
+    assert result == expected
