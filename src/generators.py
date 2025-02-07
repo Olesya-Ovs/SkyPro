@@ -11,5 +11,8 @@ def transaction_descriptions(transactions: list[dict]):
 
 
 
-def card_number_generator():
-    pass
+def card_number_generator(start: int, stop: int) -> str:
+    """выдает номера банковских карт в заданном диапазоне от 0000 0000 0000 0001 до 9999 9999 9999 9999"""
+    for num in range(start, stop + 1):
+        str_num = f"{num:016}"
+        yield f"{str_num[:4]} {str_num[4:8]} {str_num[8:12]} {str_num[12:16]}"

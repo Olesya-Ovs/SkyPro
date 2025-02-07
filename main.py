@@ -1,7 +1,7 @@
 from src.masks import get_mask_account, get_mask_card_number
 from src.processing import filter_by_state, sort_by_date
 from src.widget import get_date, mask_account_card
-from src.generators import filter_by_currency, transaction_descriptions
+from src.generators import filter_by_currency, transaction_descriptions, card_number_generator
 
 transactions =[
     {
@@ -73,7 +73,7 @@ print(my_sorted_list_by_date)
 my_filter_by_currency = filter_by_currency(transactions, "USD")
 for _ in range(1):
     print(next(my_filter_by_currency, 'Список окончен'))
-    #
+
 my_transaction_descriptions = transaction_descriptions(transactions)
 for _ in range(4):
     try:
@@ -82,3 +82,6 @@ for _ in range(4):
         print("Список окончен")
         break
 
+
+for card_number in card_number_generator(5, 1):
+    print(card_number)
