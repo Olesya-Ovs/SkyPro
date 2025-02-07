@@ -1,6 +1,6 @@
 import pytest
 
-from src.generators import filter_by_currency
+from src.generators import filter_by_currency, transaction_descriptions
 
 @pytest.mark.parametrize("user_currency, expected", [
     ("USD", [
@@ -37,3 +37,12 @@ def test_filter_by_currency_1(transactions, user_currency, expected: list[dict])
     result = list((transaction for transaction in transactions
                    if transaction["operationAmount"]["currency"]["name"] == user_currency))
     assert result == expected
+
+
+def test_transaction_descriptions(transactions):
+    generator = transaction_descriptions(transactions)
+    assert next(generator) == "Перевод организации"
+    assert next(generator) == "Перевод со счета на счет"
+    assert next(generator) == "Перевод с карты на карту"
+    assert next(generator) == "Список окончен"
+

@@ -1,7 +1,7 @@
 from src.masks import get_mask_account, get_mask_card_number
 from src.processing import filter_by_state, sort_by_date
 from src.widget import get_date, mask_account_card
-from src.generators import filter_by_currency
+from src.generators import filter_by_currency, transaction_descriptions
 
 transactions =[
     {
@@ -73,11 +73,12 @@ print(my_sorted_list_by_date)
 my_filter_by_currency = filter_by_currency(transactions, "USD")
 for _ in range(1):
     print(next(my_filter_by_currency, 'Список окончен'))
-    # try:
-    #     print(next(my_filter_by_currency))
-    # except StopIteration:
-    #     print("Список окончен")
-    #     break
-
-
+    #
+my_transaction_descriptions = transaction_descriptions(transactions)
+for _ in range(4):
+    try:
+        print(next(my_transaction_descriptions))
+    except StopIteration:
+        print("Список окончен")
+        break
 
