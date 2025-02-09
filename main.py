@@ -1,9 +1,9 @@
+from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 from src.masks import get_mask_account, get_mask_card_number
 from src.processing import filter_by_state, sort_by_date
 from src.widget import get_date, mask_account_card
-from src.generators import filter_by_currency, transaction_descriptions, card_number_generator
 
-transactions =[
+transactions = [
     {
         "id": 939719570,
         "state": "EXECUTED",
@@ -11,7 +11,7 @@ transactions =[
         "operationAmount": {"amount": "9824.07", "currency": {"name": "USD", "code": "USD"}},
         "description": "Перевод организации",
         "from": "Счет 75106830613657916952",
-        "to": "Счет 11776614605963066702"
+        "to": "Счет 11776614605963066702",
     },
     {
         "id": 142264268,
