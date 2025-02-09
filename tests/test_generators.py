@@ -33,18 +33,24 @@ from src.generators import filter_by_currency, transaction_descriptions, card_nu
         "to": "Счет 22251667383060284222"
     }]),
 ])
-def test_filter_by_currency_1(transactions, user_currency, expected: list[dict]):
+def test_filter_by_currency_1(transactions: list[dict], user_currency: str, expected: list[dict]) -> None:
     result = list((transaction for transaction in transactions
                    if transaction["operationAmount"]["currency"]["name"] == user_currency))
     assert result == expected
 
 
-def test_transaction_descriptions(transactions):
+@pytest.mark.parametrize("description", [
+    ("Перевод организации"),
+    ("Перевод со счета на счет"),
+    ("Перевод с карты на карту"),
+    #("Список окончен"),
+])
+def test_transaction_descriptions(transactions: list[dict], description: str) -> None:
     generator = transaction_descriptions(transactions)
-    assert next(generator) == "Перевод организации"
-    assert next(generator) == "Перевод со счета на счет"
-    assert next(generator) == "Перевод с карты на карту"
-    assert next(generator) == "Список окончен"
+    assert next(generator) == description
+    assert next(generator) == description
+    assert next(generator) == description
+    #assert next(generator) == description
 
 
 @pytest.mark.parametrize("start, stop, expected", [
@@ -58,6 +64,6 @@ def test_transaction_descriptions(transactions):
                   "0000 0000 0000 4057"]),
     (5, 1, [])
 ])
-def test_card_number_generator(start, stop, expected):
+def test_card_number_generator(start: int, stop: int, expected: list[str]) -> None:
     result = list(card_number_generator(start, stop))
     assert result == expected
