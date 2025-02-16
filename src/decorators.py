@@ -1,20 +1,37 @@
 from time import time
+from typing import Any, Callable, Optional
 
 
-def log(my_function, filename=None):
-    def wrapper(*args, **kwargs):
-        start_time = time()
-        print(start_time)
-        try:
-            print(f'Функция {my_function} завершили работу с результатом {my_function(*args, **kwargs)}')
-        except Exception as e:
-            print(f'Функция {my_function} завершили работу с ошибкой {e} Inputs:')
-        end_time = time()
-        print(end_time)
-    return wrapper
+def log(filename: Optional[str] = None) -> Callable:
+    """Декоратор, который автоматически логирует начало и конец выполнения функции,
+    а также ее результаты или возникшие ошибки"""
+    def my_decorator(my_function: Any) -> Any:
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            start_time = time()
+            try:
+                result = my_function(*args, **kwargs)
+                end_time = time()
+                if filename:
+                    with open(filename, 'a') as f:
+                        f.write(f'Функция {my_function.__name__} завершила работу с результатом {result}\n')
+                else:
+                    print(f'Функция {my_function.__name__} завершила работу с результатом {result}')
+                return result
+            except Exception as e:
+                end_time = time()
+                if filename:
+                    with open(filename, 'a') as f:
+                        f.write(f'Функция {my_function.__name__} завершила работу с ошибкой {e} Inputs:{args},'
+                                f'{kwargs}\n')
+                else:
+                    print(f'Функция {my_function.__name__} завершила работу с ошибкой {e} Inputs:{args}, {kwargs}')
+        return wrapper
+    return my_decorator
 
-@log
-def division(x, y):
+
+@log()
+def division(x: int, y: int) -> float:
     return x / y
 
-division(5,1)
+
+division(2, 1)
